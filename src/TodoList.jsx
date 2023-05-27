@@ -1,6 +1,6 @@
 import {useSelector, useDispatch} from 'react-redux'
-import { useState } from 'react'
-import {addTodo, deleteTodo} from './store/todosReducer'
+import { useEffect, useState } from 'react'
+import {addTodo, deleteTodo, fetchTodos} from './store/todosReducer'
 
 
 const TodoList = () => {
@@ -8,6 +8,10 @@ const TodoList = () => {
     const todos = useSelector(state => state.todos.todos)
     const dispatch = useDispatch()
 
+    useEffect(() => {
+        dispatch(fetchTodos())
+    }, [dispatch])
+    
 
     const handleClick = () => {
         if (newtodo.trim() !== '') {
@@ -28,9 +32,9 @@ const TodoList = () => {
             >Добавить</button>
             <ul>
                 {todos && todos.map( t => 
-                    <li onClick={
+                    <li key={t.id}  onClick={
                         () => onDeleteTodo(t)
-                    }>{t}</li>                
+                    }>{t.title}</li>                
                 )}
             </ul>
         </div>

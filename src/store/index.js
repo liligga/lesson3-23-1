@@ -1,6 +1,7 @@
-import {combineReducers, legacy_createStore as createStore} from 'redux'
+import {combineReducers, applyMiddleware, legacy_createStore as createStore} from 'redux'
 import counterReducer from './counterReducer'
 import todosReducer from './todosReducer'
+import thunk from 'redux-thunk'
 
 const rootReducer = combineReducers({
     todos: todosReducer,
@@ -9,6 +10,7 @@ const rootReducer = combineReducers({
 
 const store = createStore(
     rootReducer, 
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+    applyMiddleware(thunk)
+    )
 
 export default store
