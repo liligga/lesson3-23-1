@@ -1,26 +1,37 @@
 import {useSelector, useDispatch} from 'react-redux'
 import { useState } from 'react'
+import {addTodo, deleteTodo} from './store/todosReducer'
+
 
 const TodoList = () => {
     const [newtodo, setNewTodo] = useState('')
-    const todos = useSelector(state => state.todos)
+    const todos = useSelector(state => state.todos.todos)
     const dispatch = useDispatch()
 
+
     const handleClick = () => {
-        dispatch(
-            {type: 'ADD_TODO', payload: 2}
-        )
+        if (newtodo.trim() !== '') {
+            dispatch(addTodo(newtodo))
+            setNewTodo('')
+        }
     }
+
+    const onDeleteTodo = (todo) => {
+        dispatch(deleteTodo(todo))
+    }
+
     return (
         <div>TodoList 
-
+            <input type="text" onChange={e => setNewTodo(e.target.value)} value={newtodo} />
             <button 
                 onClick={handleClick}
-            >add</button>
+            >Добавить</button>
             <ul>
-            {todos.map( t => 
-                <li>{t}</li>                
-            )}
+                {todos && todos.map( t => 
+                    <li onClick={
+                        () => onDeleteTodo(t)
+                    }>{t}</li>                
+                )}
             </ul>
         </div>
     )
