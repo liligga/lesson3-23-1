@@ -1,6 +1,7 @@
 import {useSelector, useDispatch} from 'react-redux'
 import { useEffect, useState } from 'react'
-import {addTodo, deleteTodo, fetchTodos} from './store/todosReducer'
+import {addTodo, deleteTodo, fetchTodos} from '../store/todosReducer'
+import { Link } from 'react-router-dom'
 
 
 const TodoList = () => {
@@ -32,9 +33,11 @@ const TodoList = () => {
             >Добавить</button>
             <ul>
                 {todos && todos.map( t => 
-                    <li key={t.id}  onClick={
-                        () => onDeleteTodo(t)
-                    }>{t.title}</li>                
+                    <Link 
+                        key={t.id} 
+                        to={`/${t.id}`}
+                        >{t.title}
+                    </Link>                
                 )}
             </ul>
         </div>

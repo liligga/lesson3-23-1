@@ -14,6 +14,22 @@ const todosReducer = (state=initialState, action) => {
     if (action.type == 'SET_TODOS') {
         return {...state, todos: action.payload}
     }
+    if (action.type == 'EDIT_TODO') {
+        const todo = state.todos.find(
+            t => Number(t.id) === action.payload.id
+        )
+        if (todo) {
+            let arr = state.todos.filter(t => 
+                t.id !== action.payload.id    
+            )
+            arr.push({
+                ...todo,
+                ...action.payload
+            })
+            return arr
+        }
+        return state
+    }
     return state
 }
 
@@ -22,6 +38,18 @@ export const fetchTodos = () => {
         axios.get('https://jsonplaceholder.typicode.com/todos')
             .then(
                 resp => dispatch(setTodos(resp.data))
+            )
+    }
+}
+
+export const asyncEditTodo = (id) => {
+    return async (dispatch) => {
+        axios.patch(`https://jsonplaceholder.typicode.com/todos/${id}`)
+            .then(
+                resp => dispatch({
+                    type: 'EDIT_TODO',
+                    payload: resp.data
+                })
             )
     }
 }
